@@ -5,7 +5,13 @@ name: Build & Release APK
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
+
+# Grants the automatic GITHUB_TOKEN permission to create releases.
+# Without this, repos with the (now-default) read-only token setting
+# fail with "Resource not accessible by integration".
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -21,8 +27,8 @@ jobs:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          java-version: "17"
-          distribution: "temurin"
+          java-version: '17'
+          distribution: 'temurin'
           cache: gradle
 
       # 3. Make gradlew executable (needed on Linux runners)
@@ -56,6 +62,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.apk.outputs.path }}
-          generate_release_notes: true # auto-fills release notes from commit messages
+          generate_release_notes: true   # auto-fills release notes from commit messages
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # built-in, no setup needed
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # built-in, no setup needed
